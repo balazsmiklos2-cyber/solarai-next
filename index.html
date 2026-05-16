@@ -47,6 +47,14 @@
 
 <div class="card">
   <div>Battery</div>
+  <div class="card">
+  <canvas id="tempChart"></canvas>
+</div>
+
+<div class="card">
+  <canvas id="batteryChart"></canvas>
+</div>
+  
   <div class="value" id="battery">--.--V</div>
 </div>
 
@@ -70,6 +78,30 @@
 
 <script>
 
+  const tempHistory =
+  JSON.parse(
+    localStorage.getItem('tempHistory')
+    || '[]'
+  );
+
+const tempLabels =
+  JSON.parse(
+    localStorage.getItem('tempLabels')
+    || '[]'
+  );
+
+const batteryHistory =
+  JSON.parse(
+    localStorage.getItem('batteryHistory')
+    || '[]'
+  );
+
+const batteryLabels =
+  JSON.parse(
+    localStorage.getItem('batteryLabels')
+    || '[]'
+  );
+  
 const client = mqtt.connect(
   'wss://broker.hivemq.com:8884/mqtt'
 );
@@ -85,6 +117,46 @@ const statusEl =
 
 const updateEl =
   document.getElementById('lastUpdate');
+
+  const tempChart = new Chart(
+  document.getElementById('tempChart'),
+  {
+    type:'line',
+
+    data:{
+      labels:tempLabels,
+
+      datasets:[
+        {
+          label:'Temperature',
+          data:tempHistory,
+          borderColor:'#66ccff',
+          tension:0.3
+        }
+      ]
+    }
+  }
+);
+
+const batteryChart = new Chart(
+  document.getElementById('batteryChart'),
+  {
+    type:'line',
+
+    data:{
+      labels:batteryLabels,
+
+      datasets:[
+        {
+          label:'Battery',
+          data:batteryHistory,
+          borderColor:'#00ff88',
+          tension:0.3
+        }
+      ]
+    }
+  }
+);
 
 client.on(
   'connect',
