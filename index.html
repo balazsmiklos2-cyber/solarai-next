@@ -59,6 +59,18 @@
   <div class="value" id="battery">--.--V</div>
 </div>
 
+  <div class="card">
+
+  <h2>
+    Wake Timeline
+  </h2>
+
+  <div id="wakeLog">
+
+  </div>
+
+</div>
+  
 <div class="card">
   <div>
     MQTT:
@@ -120,6 +132,9 @@ const statusEl =
 const updateEl =
   document.getElementById('lastUpdate');
 
+const wakeLogEl =
+document.getElementById('wakeLog');
+
 client.on(
   'connect',
   () => {
@@ -139,6 +154,9 @@ client.on(
     client.subscribe(
       'solarai/balazsnode9284/battery'
     );
+    client.subscribe(
+  'solarai/balazsnode9284/wake'
+);
   }
 );
 
@@ -277,6 +295,22 @@ localStorage.setItem(
 );
 }
 
+if(
+  topic ==
+  'solarai/balazsnode9284/wake'
+){
+
+  const now =
+    new Date().toLocaleTimeString();
+
+  wakeLogEl.innerHTML =
+    '<div>'
+    + now
+    + ' '
+    + value
+    + '</div>'
+    + wakeLogEl.innerHTML;
+}
     updateEl.innerHTML =
       new Date().toLocaleTimeString();
   }
