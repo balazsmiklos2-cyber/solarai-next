@@ -217,6 +217,31 @@ client.on(
     value + '°C';
 }
 
+tempHistory.push(t);
+
+tempLabels.push(
+  new Date().toLocaleTimeString()
+);
+
+if(tempHistory.length > 500){
+
+  tempHistory.shift();
+
+  tempLabels.shift();
+}
+
+tempChart.update();
+
+localStorage.setItem(
+  'tempHistory',
+  JSON.stringify(tempHistory)
+);
+
+localStorage.setItem(
+  'tempLabels',
+  JSON.stringify(tempLabels)
+);
+    
     if(
   topic ==
   'solarai/balazsnode9284/battery'
@@ -239,6 +264,31 @@ client.on(
 
   battEl.innerHTML =
     icon + ' ' + value + 'v';
+
+    batteryHistory.push(v);
+
+batteryLabels.push(
+  new Date().toLocaleTimeString()
+);
+
+if(batteryHistory.length > 500){
+
+  batteryHistory.shift();
+
+  batteryLabels.shift();
+}
+
+batteryChart.update();
+
+localStorage.setItem(
+  'batteryHistory',
+  JSON.stringify(batteryHistory)
+);
+
+localStorage.setItem(
+  'batteryLabels',
+  JSON.stringify(batteryLabels)
+);
 }
 
     updateEl.innerHTML =
