@@ -75,21 +75,21 @@
 
   <h2>
     Power Analytics
+  </h2>
 
-    <div class="card">
+  <div id="drainRate">
+    Calculating...
+  </div>
+
+</div>
+
+<div class="card">
 
   <h2>
     Runtime Prediction
   </h2>
 
   <div id="runtimePrediction">
-    Calculating...
-  </div>
-
-</div>
-  </h2>
-
-  <div id="drainRate">
     Calculating...
   </div>
 
@@ -399,7 +399,9 @@ localStorage.setItem(
   JSON.stringify(batteryLabels)
 );
 }
+}
 
+    
 if(
   topic ==
   'solarai/balazsnode9284/wake'
