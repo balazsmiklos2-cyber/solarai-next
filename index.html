@@ -5,7 +5,8 @@
   <title>SOLAR-AI</title>
 
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <style>
     body{
       background:#0b1020;
@@ -196,32 +197,32 @@ client.on(
 
   tempEl.innerHTML =
     value + '°C';
+
+  tempHistory.push(t);
+
+  tempLabels.push(
+    new Date().toLocaleTimeString()
+  );
+
+  if(tempHistory.length > 500){
+
+    tempHistory.shift();
+
+    tempLabels.shift();
+  }
+
+  tempChart.update();
+
+  localStorage.setItem(
+    'tempHistory',
+    JSON.stringify(tempHistory)
+  );
+
+  localStorage.setItem(
+    'tempLabels',
+    JSON.stringify(tempLabels)
+  );
 }
-
-tempHistory.push(t);
-
-tempLabels.push(
-  new Date().toLocaleTimeString()
-);
-
-if(tempHistory.length > 500){
-
-  tempHistory.shift();
-
-  tempLabels.shift();
-}
-
-tempChart.update();
-
-localStorage.setItem(
-  'tempHistory',
-  JSON.stringify(tempHistory)
-);
-
-localStorage.setItem(
-  'tempLabels',
-  JSON.stringify(tempLabels)
-);
     
     if(
   topic ==
@@ -308,10 +309,7 @@ const tempChart = new Chart(
       ]
     }
   }
-);
-
-const batteryChart = new Chart(
-  document.getElementById('batteryChart'),
+,
   {
     type:'line',
 
