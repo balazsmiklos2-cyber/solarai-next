@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>SOLAR-AI</title>
+
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
   <style>
     body{
@@ -22,6 +25,14 @@
       font-size:48px;
       font-weight:bold;
     }
+
+    .online{
+      color:#00ff88;
+    }
+
+    .offline{
+      color:#ff5555;
+    }
   </style>
 </head>
 
@@ -38,6 +49,115 @@
   <div>Battery</div>
   <div class="value" id="battery">--.--V</div>
 </div>
+
+<div class="card">
+  <div>
+    MQTT:
+    <span id="status" class="offline">
+      OFFLINE
+    </span>
+  </div>
+
+  <br>
+
+  <div>
+    Last Update:
+    <span id="lastUpdate">
+      --
+    </span>
+  </div>
+</div>
+
+<script>
+
+const client = mqtt.connect(
+  'wss://broker.hivemq.com:8884/mqtt'
+);
+
+const tempEl =
+  document.getElementById('temp');
+
+const battEl =
+  document.getElementById('battery');
+
+const statusEl =
+  document.getElementById('status');
+
+const updateEl =
+  document.getElementById('lastUpdate');
+
+client.on(
+  'connect',
+  () => {
+
+    console.log('MQTT CONNECTED');
+
+    statusEl.innerHTML =
+      'ONLINE';
+
+    statusEl.className =
+      'online';
+
+    client.subscribe(
+      'solarai/balazsnode9284/temp'
+    );
+
+    client.subscribe(
+      'solarai/balazsnode9284/battery'
+    );
+  }
+);
+
+client.on(
+  'message',
+  (topic, message) => {
+
+    const value =
+      message.toString();
+
+    console.log(
+      topic,
+      value
+    );
+
+    if(
+      topic ==
+      'solarai/balazsnode9284/temp'
+    ){
+
+      tempEl.innerHTML =
+        value + '°C';
+    }
+
+    if(
+      topic ==
+      'solarai/balazsnode9284/battery'
+    ){
+
+      battEl.innerHTML =
+        value + 'V';
+    }
+
+    updateEl.innerHTML =
+      new Date().toLocaleTimeString();
+  }
+);
+
+client.on(
+  'error',
+  (err) => {
+
+    console.log(err);
+
+    statusEl.innerHTML =
+      'ERROR';
+
+    statusEl.className =
+      'offline';
+  }
+);
+
+</script>
 
 </body>
 </html>
