@@ -98,6 +98,7 @@ const batteryHistory =
   );
 
 const batteryLabels =
+  let lastBattery = null;
   JSON.parse(
     localStorage.getItem('batteryLabels')
     || '[]'
@@ -223,8 +224,34 @@ client.on(
     icon = '🔴';
   }
 
-  battEl.innerHTML =
-    icon + ' ' + value + 'v';
+let trend =
+  '';
+
+if(lastBattery != null){
+
+  const diff =
+    v - lastBattery;
+
+  if(diff > 0.01){
+
+    trend =
+      ' ☀️';
+  }
+  else if(diff < -0.01){
+
+    trend =
+      ' 🌙';
+  }
+}
+
+lastBattery = v;
+
+battEl.innerHTML =
+  icon
+  + trend
+  + '<br>'
+  + value
+  + 'V';
 
     batteryHistory.push(v);
 
