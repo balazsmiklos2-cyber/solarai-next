@@ -70,6 +70,24 @@
   </div>
 
 </div>
+
+<div class="card">
+
+  <h2>
+    Device Status
+  </h2>
+
+  <div id="deviceStatus">
+    UNKNOWN
+  </div>
+
+  <br>
+
+  <div id="lastSeen">
+    --
+  </div>
+
+</div>
   
 <div class="card">
   <div>
@@ -134,6 +152,12 @@ const updateEl =
 
 const wakeLogEl =
 document.getElementById('wakeLog');
+
+const deviceStatusEl =
+document.getElementById('deviceStatus');
+
+const lastSeenEl =
+document.getElementById('lastSeen');
 
 client.on(
   'connect',
@@ -313,6 +337,26 @@ if(
 }
     updateEl.innerHTML =
       new Date().toLocaleTimeString();
+
+    deviceStatusEl.innerHTML =
+  '🟢 ONLINE';
+
+lastSeenEl.innerHTML =
+  'Last update: '
+  + new Date().toLocaleTimeString();
+
+clearTimeout(window.sleepTimer);
+
+window.sleepTimer =
+  setTimeout(
+    () => {
+
+      deviceStatusEl.innerHTML =
+        '🌙 SLEEPING';
+
+    },
+    90000
+  );
   }
 );
 
