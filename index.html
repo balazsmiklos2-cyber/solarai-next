@@ -119,26 +119,6 @@ const statusEl =
 const updateEl =
   document.getElementById('lastUpdate');
 
-const batteryChart = new Chart(
-  document.getElementById('batteryChart'),
-  {
-    type:'line',
-
-    data:{
-      labels:batteryLabels,
-
-      datasets:[
-        {
-          label:'Battery',
-          data:batteryHistory,
-          borderColor:'#00ff88',
-          tension:0.3
-        }
-      ]
-    }
-  }
-);
-
 client.on(
   'connect',
   () => {
@@ -330,24 +310,8 @@ const batteryChart = new Chart(
     }
   }
 );
-,
-  {
-    type:'line',
+  
 
-    data:{
-      labels:batteryLabels,
-
-      datasets:[
-        {
-          label:'Battery',
-          data:batteryHistory,
-          borderColor:'#00ff88',
-          tension:0.3
-        }
-      ]
-    }
-  }
-);
 </script>
 
 </body>
