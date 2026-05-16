@@ -311,7 +311,24 @@ const batteryChart = new Chart(
   }
 );
   
+tempChart.update();
+batteryChart.update();
 
+if(tempHistory.length > 0){
+
+  tempEl.innerHTML =
+    tempHistory[
+      tempHistory.length - 1
+    ] + '°C';
+}
+
+if(batteryHistory.length > 0){
+
+  battEl.innerHTML =
+    batteryHistory[
+      batteryHistory.length - 1
+    ] + 'V';
+}
 </script>
 
 </body>
