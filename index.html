@@ -102,6 +102,7 @@ const batteryLabels =
     localStorage.getItem('batteryLabels')
     || '[]'
   );
+  let lastBattery = null;
   
 const client = mqtt.connect(
   'wss://broker.hivemq.com:8884/mqtt'
@@ -223,8 +224,32 @@ client.on(
     icon = '🔴';
   }
 
-  battEl.innerHTML =
-    icon + ' ' + value + 'v';
+  let trend =
+  '';
+
+if(lastBattery != null){
+
+  const diff =
+    v - lastBattery;
+
+  if(diff > 0.01){
+
+    trend = ' ☀️';
+  }
+  else if(diff < -0.01){
+
+    trend = ' 🌙';
+  }
+}
+
+lastBattery = v;
+
+battEl.innerHTML =
+  icon
+  + trend
+  + ' '
+  + value
+  + 'V';
 
     batteryHistory.push(v);
 
