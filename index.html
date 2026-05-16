@@ -74,6 +74,18 @@
 <div class="card">
 
   <h2>
+    Power Analytics
+  </h2>
+
+  <div id="drainRate">
+    Calculating...
+  </div>
+
+</div>
+  
+<div class="card">
+
+  <h2>
     Device Status
   </h2>
 
@@ -158,6 +170,9 @@ document.getElementById('deviceStatus');
 
 const lastSeenEl =
 document.getElementById('lastSeen');
+
+const drainRateEl =
+document.getElementById('drainRate');
 
 client.on(
   'connect',
@@ -307,6 +322,45 @@ if(batteryHistory.length > 500){
 }
 
 batteryChart.update();
+
+if(
+  batteryHistory.length > 2
+){
+
+  const first =
+    batteryHistory[0];
+
+  const last =
+    batteryHistory[
+      batteryHistory.length - 1
+    ];
+
+  const diff =
+    last - first;
+
+  const hours =
+    batteryHistory.length
+    * 20
+    / 60;
+
+  const rate =
+    diff / hours;
+
+  if(rate > 0){
+
+    drainRateEl.innerHTML =
+      '☀️ Charge: +'
+      + rate.toFixed(3)
+      + ' V/h';
+  }
+  else{
+
+    drainRateEl.innerHTML =
+      '🌙 Drain: '
+      + rate.toFixed(3)
+      + ' V/h';
+  }
+}
 
 localStorage.setItem(
   'batteryHistory',
