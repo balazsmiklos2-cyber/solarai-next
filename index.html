@@ -121,22 +121,53 @@ client.on(
     );
 
     if(
-      topic ==
-      'solarai/balazsnode9284/temp'
-    ){
+  topic ==
+  'solarai/balazsnode9284/temp'
+){
 
-      tempEl.innerHTML =
-        value + '°C';
-    }
+  const t =
+    parseFloat(value);
+
+  let color =
+    '#ffffff';
+
+  if(t < 10){
+    color = '#66ccff';
+  }
+  else if(t > 30){
+    color = '#ff8844';
+  }
+
+  tempEl.style.color =
+    color;
+
+  tempEl.innerHTML =
+    value + '°C';
+}
 
     if(
-      topic ==
-      'solarai/balazsnode9284/battery'
-    ){
+  topic ==
+  'solarai/balazsnode9284/battery'
+){
 
-      battEl.innerHTML =
-        value + 'V';
-    }
+  let icon = '🔋';
+
+  const v =
+    parseFloat(value);
+
+  if(v > 4.0){
+    icon = '🟢';
+  }
+  else if(v > 3.7){
+    icon = '🟡';
+  }
+  else{
+    icon = '🔴';
+  }
+
+  battEl.innerHTML =
+    icon + ' ' + value + 'V';
+}
 
     updateEl.innerHTML =
       new Date().toLocaleTimeString();
