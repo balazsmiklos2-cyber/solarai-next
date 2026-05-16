@@ -75,6 +75,18 @@
 
   <h2>
     Power Analytics
+
+    <div class="card">
+
+  <h2>
+    Runtime Prediction
+  </h2>
+
+  <div id="runtimePrediction">
+    Calculating...
+  </div>
+
+</div>
   </h2>
 
   <div id="drainRate">
@@ -173,6 +185,9 @@ document.getElementById('lastSeen');
 
 const drainRateEl =
 document.getElementById('drainRate');
+
+const runtimeEl =
+document.getElementById('runtimePrediction');
 
 client.on(
   'connect',
@@ -346,22 +361,34 @@ if(
   const rate =
     diff / hours;
 
-  if(rate > 0){
+if(rate > 0){
 
-    drainRateEl.innerHTML =
-      '☀️ Charge: +'
-      + rate.toFixed(3)
-      + ' V/h';
-  }
-  else{
+  drainRateEl.innerHTML =
+    '☀️ Charge: +'
+    + rate.toFixed(3)
+    + ' V/h';
 
-    drainRateEl.innerHTML =
-      '🌙 Drain: '
-      + rate.toFixed(3)
-      + ' V/h';
-  }
+  runtimeEl.innerHTML =
+    '♾️ Unlimited (charging)';
 }
+else{
 
+  drainRateEl.innerHTML =
+    '🌙 Drain: '
+    + rate.toFixed(3)
+    + ' V/h';
+
+  const remaining =
+    last - 3.0;
+
+  const runtime =
+    remaining / Math.abs(rate);
+
+  runtimeEl.innerHTML =
+    '⏳ '
+    + runtime.toFixed(1)
+    + ' h remaining';
+}
 localStorage.setItem(
   'batteryHistory',
   JSON.stringify(batteryHistory)
