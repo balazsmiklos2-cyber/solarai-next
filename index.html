@@ -290,24 +290,6 @@ client.on(
       'offline';
   }
 );
-const tempChart = new Chart(
-  document.getElementById('tempChart'),
-  {
-    type:'line',
-
-    data:{
-      labels:tempLabels,
-
-      datasets:[
-        {
-          label:'Temperature',
-          data:tempHistory,
-          borderColor:'#66ccff',
-          tension:0.3
-        }
-      ]
-    }
-  }
 ,
   {
     type:'line',
