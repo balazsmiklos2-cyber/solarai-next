@@ -162,6 +162,36 @@ const batteryLabels =
     || '[]'
   );
   let lastBattery = null;
+
+  // FIX ARRAY DESYNC
+
+while(
+  batteryLabels.length >
+  batteryHistory.length
+){
+  batteryLabels.shift();
+}
+
+while(
+  batteryHistory.length >
+  batteryLabels.length
+){
+  batteryHistory.shift();
+}
+
+while(
+  tempLabels.length >
+  tempHistory.length
+){
+  tempLabels.shift();
+}
+
+while(
+  tempHistory.length >
+  tempLabels.length
+){
+  tempHistory.shift();
+}
   
 const client = mqtt.connect(
   'wss://broker.hivemq.com:8884/mqtt'
