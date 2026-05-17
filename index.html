@@ -156,6 +156,11 @@ const batteryLabels =
     localStorage.getItem('batteryLabels')
     || '[]'
   );
+  const timeLabels =
+  JSON.parse(
+    localStorage.getItem('timeLabels')
+    || '[]'
+  );
   let lastBattery = null;
   
 const client = mqtt.connect(
@@ -252,9 +257,18 @@ client.on(
 
   tempHistory.push(t);
 
+  batteryLabels.push(
+  new Date().toLocaleTimeString()
+);
+
+if(batteryLabels.length > 500){
+
+  batteryLabels.shift();
+}
+      
   tempLabels.push(
-    new Date().toLocaleTimeString()
-  );
+  value
+);
 
   if(tempHistory.length > 500){
 
@@ -463,7 +477,7 @@ client.on(
     type:'line',
 
     data:{
-      labels:tempLabels,
+      labels: batteryLabels,
 
       datasets:[
         {
