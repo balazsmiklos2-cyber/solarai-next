@@ -257,17 +257,13 @@ client.on(
 
   tempHistory.push(t);
 
-  batteryLabels.push(
-  new Date().toLocaleTimeString()
-);
-
 if(batteryLabels.length > 500){
 
-  batteryLabels.shift();
+  tempLabels.shift();
 }
-      
-  tempLabels.push(
-  value
+
+tempLabels.push(
+  new Date().toLocaleTimeString()
 );
 
   if(tempHistory.length > 500){
@@ -337,7 +333,7 @@ battEl.innerHTML =
   + value
   + 'V';
 
-    batteryHistory.push(v);
+batteryHistory.push(v);
 
 batteryLabels.push(
   new Date().toLocaleTimeString()
