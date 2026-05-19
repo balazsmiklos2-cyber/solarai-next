@@ -294,7 +294,7 @@ client.on(
 
   tempHistory.push(t);
 
-if(batteryLabels.length > 500){
+if(tempLabels.length > 500){
 
   tempLabels.shift();
 }
@@ -305,12 +305,18 @@ tempLabels.push(
 
   if(tempHistory.length > 500){
 
-    tempHistory.shift();
+  tempHistory.shift();
 
-    tempLabels.shift();
-  }
+  tempLabels.shift();
+}
 
-  tempChart.update();
+tempChart.data.labels =
+  tempLabels;
+
+tempChart.data.datasets[0].data =
+  tempHistory;
+
+tempChart.update();
 
   localStorage.setItem(
     'tempHistory',
@@ -382,6 +388,12 @@ if(batteryHistory.length > 500){
 
   batteryLabels.shift();
 }
+
+batteryChart.data.labels =
+  batteryLabels;
+
+batteryChart.data.datasets[0].data =
+  batteryHistory;
 
 batteryChart.update();
 
