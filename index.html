@@ -164,6 +164,7 @@ const batteryLabels =
     || '[]'
   );
   const timeLabels =
+    let lastWakeTime = "--:--";
   JSON.parse(
     localStorage.getItem('timeLabels')
     || '[]'
@@ -300,7 +301,7 @@ if(tempLabels.length > 500){
 }
 
 tempLabels.push(
-  new Date().toLocaleTimeString()
+  lastWakeTime
 );
 
   if(tempHistory.length > 500){
@@ -379,7 +380,7 @@ battEl.innerHTML =
 batteryHistory.push(v);
 
 batteryLabels.push(
-  new Date().toLocaleTimeString()
+  lastWakeTime
 );
 
 if(batteryHistory.length > 500){
@@ -465,6 +466,8 @@ if(
   topic ==
   'solarai/balazsnode9284/wake'
 ){
+  lastWakeTime =
+  new Date().toLocaleTimeString();
 
   const now =
     new Date().toLocaleTimeString();
