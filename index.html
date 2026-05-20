@@ -163,12 +163,12 @@ const batteryLabels =
     localStorage.getItem('batteryLabels')
     || '[]'
   );
-  
+
 let lastWakeTime = "--:--";
-  
+
 let lastBattery = null;
 
-  // FIX ARRAY DESYNC
+// FIX ARRAY DESYNC
 
 while(
   batteryLabels.length >
