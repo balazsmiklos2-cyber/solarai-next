@@ -54,17 +54,15 @@
 </div>
 
 <div class="card">
-  <div>Temperature Graph</div>
+  <div>Battery</div>
+  <div class="card">
   <canvas id="tempChart"></canvas>
 </div>
 
 <div class="card">
-  <div>Battery Graph</div>
   <canvas id="batteryChart"></canvas>
 </div>
-
-<div class="card">
-  <div>Battery</div>
+  
   <div class="value" id="battery">--.--V</div>
 </div>
 
@@ -165,12 +163,14 @@ const batteryLabels =
     localStorage.getItem('batteryLabels')
     || '[]'
   );
+  const timeLabels =
+  JSON.parse(
+    localStorage.getItem('timeLabels')
+    || '[]'
+  );
+  let lastBattery = null;
 
-let lastWakeTime = "--:--";
-
-let lastBattery = null;
-
-// FIX ARRAY DESYNC
+  // FIX ARRAY DESYNC
 
 while(
   batteryLabels.length >
@@ -294,29 +294,23 @@ client.on(
 
   tempHistory.push(t);
 
-if(tempLabels.length > 500){
+if(batteryLabels.length > 500){
 
   tempLabels.shift();
 }
 
 tempLabels.push(
-  lastWakeTime
+  new Date().toLocaleTimeString()
 );
 
   if(tempHistory.length > 500){
 
-  tempHistory.shift();
+    tempHistory.shift();
 
-  tempLabels.shift();
-}
+    tempLabels.shift();
+  }
 
-tempChart.data.labels =
-  tempLabels;
-
-tempChart.data.datasets[0].data =
-  tempHistory;
-
-tempChart.update();
+  tempChart.update();
 
   localStorage.setItem(
     'tempHistory',
@@ -379,7 +373,7 @@ battEl.innerHTML =
 batteryHistory.push(v);
 
 batteryLabels.push(
-  lastWakeTime
+  new Date().toLocaleTimeString()
 );
 
 if(batteryHistory.length > 500){
@@ -388,12 +382,6 @@ if(batteryHistory.length > 500){
 
   batteryLabels.shift();
 }
-
-batteryChart.data.labels =
-  batteryLabels;
-
-batteryChart.data.datasets[0].data =
-  batteryHistory;
 
 batteryChart.update();
 
@@ -465,8 +453,6 @@ if(
   topic ==
   'solarai/balazsnode9284/wake'
 ){
-  lastWakeTime =
-  new Date().toLocaleTimeString();
 
   const now =
     new Date().toLocaleTimeString();
