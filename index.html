@@ -256,6 +256,9 @@ client.on(
     const value =
       message.toString();
 
+    const now =
+  new Date().toLocaleTimeString();
+
     console.log(
       topic,
       value
@@ -292,9 +295,7 @@ if(batteryLabels.length > 500){
   tempLabels.shift();
 }
 
-tempLabels.push(
-  new Date().toLocaleTimeString()
-);
+tempLabels.push(now);
 
   if(tempHistory.length > 500){
 
@@ -365,10 +366,8 @@ battEl.innerHTML =
 
 batteryHistory.push(v);
 
-batteryLabels.push(
-  new Date().toLocaleTimeString()
-);
-
+batteryLabels.push(now);
+      
 if(batteryHistory.length > 500){
 
   batteryHistory.shift();
