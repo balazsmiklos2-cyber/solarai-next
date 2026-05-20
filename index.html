@@ -537,6 +537,64 @@ const batteryChart = new Chart(
   }
 );
   
+fetch("http://192.168.1.67/history")
+  .then(res => res.json())
+  .then(data => {
+
+    tempHistory.length = 0;
+    tempLabels.length = 0;
+
+    batteryHistory.length = 0;
+    batteryLabels.length = 0;
+
+    data.forEach(item => {
+
+      tempHistory.push(item.temp);
+
+      batteryHistory.push(item.battery);
+
+      tempLabels.push(item.time);
+
+      batteryLabels.push(item.time);
+    });
+
+    localStorage.setItem(
+      'tempHistory',
+      JSON.stringify(tempHistory)
+    );
+
+    localStorage.setItem(
+      'tempLabels',
+      JSON.stringify(tempLabels)
+    );
+
+    localStorage.setItem(
+      'batteryHistory',
+      JSON.stringify(batteryHistory)
+    );
+
+    localStorage.setItem(
+      'batteryLabels',
+      JSON.stringify(batteryLabels)
+    );
+
+    tempChart.update();
+
+    batteryChart.update();
+
+    console.log(
+      "HISTORY LOADED",
+      data.length
+    );
+  })
+  .catch(err => {
+
+    console.log(
+      "HISTORY LOAD ERROR",
+      err
+    );
+  });
+  
 tempChart.update();
 batteryChart.update();
 
