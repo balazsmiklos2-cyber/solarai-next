@@ -133,7 +133,7 @@
 
 <script>
 
- const tempHistory =
+  const tempHistory =
   JSON.parse(
     localStorage.getItem('tempHistory')
     || '[]'
@@ -156,12 +156,42 @@ const batteryLabels =
     localStorage.getItem('batteryLabels')
     || '[]'
   );
+  const timeLabels =
+  JSON.parse(
+    localStorage.getItem('timeLabels')
+    || '[]'
+  );
+  let lastBattery = null;
 
+  // FIX ARRAY DESYNC
 
-const wakeHistory = [];
+while(
+  batteryLabels.length >
+  batteryHistory.length
+){
+  batteryLabels.shift();
+}
 
-let lastBattery = null;
-let historyLoaded = false;
+while(
+  batteryHistory.length >
+  batteryLabels.length
+){
+  batteryHistory.shift();
+}
+
+while(
+  tempLabels.length >
+  tempHistory.length
+){
+  tempLabels.shift();
+}
+
+while(
+  tempHistory.length >
+  tempLabels.length
+){
+  tempHistory.shift();
+}
   
 const client = mqtt.connect(
   'wss://broker.hivemq.com:8884/mqtt'
@@ -194,30 +224,11 @@ document.getElementById('drainRate');
 const runtimeEl =
 document.getElementById('runtimePrediction');
 
-const savedWake =
-  JSON.parse(
-    localStorage.getItem('wakeHistory')
-    || '[]'
-  );
-
-savedWake.forEach(item => {
-
-  wakeLogEl.innerHTML +=
-    '<div>'
-    + item
-    + '</div>';
-});
-
 client.on(
   'connect',
   () => {
 
     console.log('MQTT CONNECTED');
-
-    if(!historyLoaded){
-      console.log("WAITING FOR HISTORY");
-      return;
-    }
 
     statusEl.innerHTML =
       'ONLINE';
@@ -438,25 +449,11 @@ if(
   const now =
     new Date().toLocaleTimeString();
 
-  const wakeEntry =
-    now
-    + ' '
-    + value;
-
-  wakeHistory.unshift(wakeEntry);
-
-  if(wakeHistory.length > 100){
-    wakeHistory.pop();
-  }
-
-  localStorage.setItem(
-    'wakeHistory',
-    JSON.stringify(wakeHistory)
-  );
-
   wakeLogEl.innerHTML =
     '<div>'
-    + wakeEntry
+    + now
+    + ' '
+    + value
     + '</div>'
     + wakeLogEl.innerHTML;
 }
@@ -543,98 +540,51 @@ fetch("http://192.168.1.67/history")
   .then(res => res.json())
   .then(data => {
 
-    if(data.length > 0){
+    tempHistory.length = 0;
+    tempLabels.length = 0;
 
-      tempHistory.length = 0;
-      tempLabels.length = 0;
-
-      batteryHistory.length = 0;
-      batteryLabels.length = 0;
-
-      data.forEach(item => {
-
-        tempHistory.push(
-          parseFloat(item.temp)
-        );
-
-        batteryHistory.push(
-          parseFloat(item.battery)
-        );
-
-        tempLabels.push(item.time);
-
-        batteryLabels.push(item.time);
-      });
-
-      localStorage.setItem(
-        'tempHistory',
-        JSON.stringify(tempHistory)
-      );
-
-      localStorage.setItem(
-        'tempLabels',
-        JSON.stringify(tempLabels)
-      );
-
-      localStorage.setItem(
-        'batteryHistory',
-        JSON.stringify(batteryHistory)
-      );
-
-      localStorage.setItem(
-        'batteryLabels',
-        JSON.stringify(batteryLabels)
-      );
-    }
-
-    tempChart.update();
-
-    batteryChart.update();
-
-    historyLoaded = true;
-
-    client.reconnect();
-  })
+    batteryHistory.length = 0;
+    batteryLabels.length = 0;
 
     data.forEach(item => {
 
-      tempHistory.push(
-        parseFloat(item.temp)
-      );
+      tempHistory.push(item.temp);
 
-      batteryHistory.push(
-        parseFloat(item.battery)
-      );
+      batteryHistory.push(item.battery);
 
       tempLabels.push(item.time);
 
       batteryLabels.push(item.time);
     });
 
-    tempChart.data.labels =
-      tempLabels;
+    localStorage.setItem(
+      'tempHistory',
+      JSON.stringify(tempHistory)
+    );
 
-    tempChart.data.datasets[0].data =
-      tempHistory;
+    localStorage.setItem(
+      'tempLabels',
+      JSON.stringify(tempLabels)
+    );
 
-    batteryChart.data.labels =
-      batteryLabels;
+    localStorage.setItem(
+      'batteryHistory',
+      JSON.stringify(batteryHistory)
+    );
 
-    batteryChart.data.datasets[0].data =
-      batteryHistory;
+    localStorage.setItem(
+      'batteryLabels',
+      JSON.stringify(batteryLabels)
+    );
 
     tempChart.update();
 
     batteryChart.update();
 
-    historyLoaded = true;
-
     console.log(
       "HISTORY LOADED",
       data.length
     );
-
-    client.reconnect();
   })
   .catch(err => {
 
@@ -642,10 +592,6 @@ fetch("http://192.168.1.67/history")
       "HISTORY LOAD ERROR",
       err
     );
-
-    historyLoaded = true;
-
-    client.reconnect();
   });
   
 tempChart.update();
