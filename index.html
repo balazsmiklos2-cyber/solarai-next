@@ -290,7 +290,7 @@ client.on(
 
   tempHistory.push(t);
 
-if(batteryLabels.length > 500){
+if(tempLabels.length > 500){
 
   tempLabels.shift();
 }
@@ -577,9 +577,21 @@ fetch("http://192.168.1.67/history")
       JSON.stringify(batteryLabels)
     );
 
-    tempChart.update();
+    tempChart.data.labels =
+  tempLabels;
 
-    batteryChart.update();
+tempChart.data.datasets[0].data =
+  tempHistory;
+
+batteryChart.data.labels =
+  batteryLabels;
+
+batteryChart.data.datasets[0].data =
+  batteryHistory;
+
+tempChart.update();
+
+batteryChart.update();
 
     console.log(
       "HISTORY LOADED",
