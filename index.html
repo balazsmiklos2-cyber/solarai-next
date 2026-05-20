@@ -2,13 +2,6 @@
 <html>
 
 <head>
-
-  <link rel="manifest" href="manifest.json">
-
-<meta name="theme-color" content="#000000">
-
-<link rel="apple-touch-icon" href="icon-192.png">
-  
   <title>SOLAR-AI</title>
 
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -562,18 +555,6 @@ if(batteryHistory.length > 0){
       batteryHistory.length - 1
     ] + 'V';
 }
-</script>
-
-<script>
-
-if("serviceWorker" in navigator){
-
-  navigator.serviceWorker.register(
-    "/sw.js"
-  );
-
-}
-
 </script>
 
 </body>
