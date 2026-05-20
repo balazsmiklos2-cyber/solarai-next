@@ -133,8 +133,29 @@
 
 <script>
 
-  const tempHistory = [];
-const tempLabels = [];
+ const tempHistory =
+  JSON.parse(
+    localStorage.getItem('tempHistory')
+    || '[]'
+  );
+
+const tempLabels =
+  JSON.parse(
+    localStorage.getItem('tempLabels')
+    || '[]'
+  );
+
+const batteryHistory =
+  JSON.parse(
+    localStorage.getItem('batteryHistory')
+    || '[]'
+  );
+
+const batteryLabels =
+  JSON.parse(
+    localStorage.getItem('batteryLabels')
+    || '[]'
+  );
 
 const batteryHistory = [];
 const batteryLabels = [];
@@ -524,11 +545,58 @@ fetch("http://192.168.1.67/history")
   .then(res => res.json())
   .then(data => {
 
-    tempHistory.length = 0;
-    tempLabels.length = 0;
+    if(data.length > 0){
 
-    batteryHistory.length = 0;
-    batteryLabels.length = 0;
+      tempHistory.length = 0;
+      tempLabels.length = 0;
+
+      batteryHistory.length = 0;
+      batteryLabels.length = 0;
+
+      data.forEach(item => {
+
+        tempHistory.push(
+          parseFloat(item.temp)
+        );
+
+        batteryHistory.push(
+          parseFloat(item.battery)
+        );
+
+        tempLabels.push(item.time);
+
+        batteryLabels.push(item.time);
+      });
+
+      localStorage.setItem(
+        'tempHistory',
+        JSON.stringify(tempHistory)
+      );
+
+      localStorage.setItem(
+        'tempLabels',
+        JSON.stringify(tempLabels)
+      );
+
+      localStorage.setItem(
+        'batteryHistory',
+        JSON.stringify(batteryHistory)
+      );
+
+      localStorage.setItem(
+        'batteryLabels',
+        JSON.stringify(batteryLabels)
+      );
+    }
+
+    tempChart.update();
+
+    batteryChart.update();
+
+    historyLoaded = true;
+
+    client.reconnect();
+  })
 
     data.forEach(item => {
 
