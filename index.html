@@ -164,8 +164,13 @@ const batteryLabels =
     || '[]'
   );
   const timeLabels =
-    let lastWakeTime = "--:--";
   JSON.parse(
+    localStorage.getItem('timeLabels')
+    || '[]'
+  );
+
+let lastWakeTime = "--:--";
+  
     localStorage.getItem('timeLabels')
     || '[]'
   );
