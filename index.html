@@ -536,6 +536,11 @@ const batteryChart = new Chart(
   }
 );
   
+const runtimeEl =
+document.getElementById('runtimePrediction');
+
+  async function loadHistory(){
+
 fetch("http://192.168.1.67/history")
 
 .then(response => response.json())
@@ -582,7 +587,7 @@ fetch("http://192.168.1.67/history")
   batteryChart.update();
 
   console.log(
-    "HISTORY RESTORED",
+    "HISTORY RELOADED",
     history.length
   );
 })
@@ -594,7 +599,10 @@ fetch("http://192.168.1.67/history")
     err
   );
 });
-  
+}
+
+loadHistory();
+
 tempChart.update();
 batteryChart.update();
 
@@ -613,6 +621,21 @@ if(batteryHistory.length > 0){
       batteryHistory.length - 1
     ] + 'V';
 }
+
+  document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if(!document.hidden){
+
+      console.log(
+        "APP REOPEN -> LOAD HISTORY"
+      );
+
+      loadHistory();
+    }
+  }
+);
 </script>
 
 </body>
