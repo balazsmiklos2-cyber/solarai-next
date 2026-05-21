@@ -537,76 +537,63 @@ const batteryChart = new Chart(
 );
   
 fetch("http://192.168.1.67/history")
-  .then(res => res.json())
-  .then(data => {
 
-    tempHistory.length = 0;
-    tempLabels.length = 0;
+.then(response => response.json())
 
-    batteryHistory.length = 0;
-    batteryLabels.length = 0;
+.then(history => {
 
-    data.forEach(item => {
+  tempHistory.length = 0;
 
-      tempHistory.push(item.temp);
+  batteryHistory.length = 0;
 
-      batteryHistory.push(item.battery);
+  tempLabels.length = 0;
 
-      tempLabels.push(item.time);
+  batteryLabels.length = 0;
 
-      batteryLabels.push(item.time);
-    });
+  history.forEach(item => {
 
-    localStorage.setItem(
-      'tempHistory',
-      JSON.stringify(tempHistory)
+    tempHistory.push(
+      parseFloat(item.temp)
     );
 
-    localStorage.setItem(
-      'tempLabels',
-      JSON.stringify(tempLabels)
+    batteryHistory.push(
+      parseFloat(item.battery)
     );
 
-    localStorage.setItem(
-      'batteryHistory',
-      JSON.stringify(batteryHistory)
-    );
+    tempLabels.push(item.time);
 
-    localStorage.setItem(
-      'batteryLabels',
-      JSON.stringify(batteryLabels)
-    );
-
-    tempChart.data.labels =
-  tempLabels;
-
-tempChart.data.datasets[0].data =
-  tempHistory;
-
-batteryChart.data.labels =
-  batteryLabels;
-
-batteryChart.data.datasets[0].data =
-  batteryHistory;
-
-tempChart.update();
-
-batteryChart.update();
-
-    console.log(
-      "HISTORY LOADED",
-      data.length
-    );
-    updateEl.innerHTML =
-  "HISTORY RESTORED";
-  })
-  .catch(err => {
-
-    console.log(
-      "HISTORY LOAD ERROR",
-      err
-    );
+    batteryLabels.push(item.time);
   });
+
+  tempChart.data.labels =
+    tempLabels;
+
+  tempChart.data.datasets[0].data =
+    tempHistory;
+
+  batteryChart.data.labels =
+    batteryLabels;
+
+  batteryChart.data.datasets[0].data =
+    batteryHistory;
+
+  tempChart.update();
+
+  batteryChart.update();
+
+  console.log(
+    "HISTORY RESTORED",
+    history.length
+  );
+})
+
+.catch(err => {
+
+  console.log(
+    "HISTORY ERROR",
+    err
+  );
+});
   
 tempChart.update();
 batteryChart.update();
